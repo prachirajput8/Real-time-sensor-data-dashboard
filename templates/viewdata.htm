@@ -1,0 +1,153 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full Data</title>
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;  /* Light gray background */
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #4CAF50;  /* Green background */
+            color: white;
+            padding: 20px 0;
+            text-align: center;  /* Center the title */
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        /* Centered title for filter section */
+        .date-form-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .date-form-container label {
+            font-size: 18px;
+            margin-right: 10px;
+        }
+
+        .date-form-container input[type="date"] {
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .date-form-container button {
+            padding: 8px 15px;
+            font-size: 16px;
+            background-color: #4CAF50;  /* Green button */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .date-form-container button:hover {
+            background-color: #45a049;
+        }
+
+        /* Table styles */
+        table {
+            width: 80%;
+            margin: 30px auto;  /* Center the table */
+            border-collapse: collapse;
+            background-color: #ffffff;  /* White background for table */
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;  /* Green background for headers */
+            color: white;
+        }
+
+        /* Message styling */
+        .no-data-message {
+            text-align: center;
+            font-size: 18px;
+            color: red;
+            margin-top: 20px;
+        }
+
+        /* Back button styling */
+        .data-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;  /* Green button */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .data-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Full Data for {{ filter_date }}</h1>
+    </header>
+
+    <!-- Date selection form -->
+    <div class="date-form-container">
+        <form method="GET" action="{{ url_for('data_page') }}">
+            <label for="date">Select Date: </label>
+            <input type="date" id="date" name="date" value="{{ filter_date }}">
+            <button type="submit">Show Data</button>
+        </form>
+    </div>
+
+    {% if data %}
+        <!-- Display the table with the filtered data -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Time Stamp</th>
+                    <th>Temperature</th>
+                    <th>Humidity</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                <tr>
+                    <td>{{ row['Time stamp'] }}</td>
+                    <td>{{ row['Temperature '] }}</td>
+                    <td>{{ row['Humidity'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="no-data-message">No data available for the selected date.</p>
+    {% endif %}
+
+    <!-- Button to go back to the dashboard -->
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="/download_excel">
+            <button>Download Data as Excel</button>
+        </a>
+        <a href="{{ url_for('filter_by_date') }}">
+            <button class="data-button">Back to Dashboard</button>
+        </a>
+    </div>
+</body>
+</html>
+

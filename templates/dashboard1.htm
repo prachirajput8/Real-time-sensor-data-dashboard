@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temperature and Humidity Data</title>
+    <style>
+        /* General Body Styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #8BC34A, #8BC34A);
+            color: #333;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Header Styling */
+        h1 {
+        text-align: center;
+        font-size: 36px;
+        color: white;
+        font-weight: 600;
+        background-color: #4CAF50;
+        padding: 15px 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition: background-color 0.3s;
+        margin-top: 40px;
+        margin-bottom: 70px;
+        display: inline-block;
+        cursor: pointer;
+        }
+
+        h1:hover {
+            background-color: #45a049;
+        }
+        
+
+        /* Toggle Button for Date Filter Form */
+        .toggle-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color:#4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            z-index: 10;
+        
+        }
+
+        .toggle-button:hover {
+            background-color: #4CAF50;
+        }
+
+        /* Compact Date Filter Form Styling, Initially Hidden */
+        .date-form {
+            display: none; /* Hidden by default */
+            flex-direction: row;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 5px 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 70px;
+            left: 20px;
+            z-index: 10;
+        }
+
+        .date-form label {
+            font-size: 16px;
+            margin-right: 5px;
+        }
+
+        .date-form input[type="date"] {
+            padding: 5px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 140px;
+            margin-right: 5px;
+        }
+
+        .date-form button {
+            padding: 5px 10px;
+            background-color:#4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .date-form button:hover {
+            background-color: #181148;
+        }
+
+        /* Navigation Bar Styling for Top-Right Corner */
+        .nav-bar {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        /* View Full Data Button Styling */
+        .data-button, .logout-btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .data-button {
+            background-color: #4CAF50;
+        }
+
+        .data-button:hover {
+            background-color: #45a049;
+        }
+
+        /* Logout Button Styling */
+        .logout-btn {
+            background-color: #f44336;
+        }
+
+        .logout-btn:hover {
+            background-color: #d32f2f;
+        }
+
+        /* Image Styling with Background and Right Margin */
+
+        image-container {
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-top: -80px;  /* Move slightly upward */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            max-width: 70%;
+            }
+
+            img {
+                display: block;
+                max-width: 100%;
+                border-radius: 10px;
+            }
+            
+
+        /* Footer Styling */
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 14px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Toggle Button for Date Filter Form -->
+    <button class="toggle-button" onclick="toggleForm()">Data Visualization</button>
+
+    <!-- Navigation Bar in Top-Right Corner with View Data and Logout Buttons -->
+    <div class="nav-bar">
+        <a href="{{ url_for('data_page') }}">
+            <button class="data-button">View Data</button>
+        </a>
+        <a href="{{ url_for('logout') }}">
+            <button class="logout-btn">Logout</button>
+        </a>
+    </div>
+
+    <!-- Main Header -->
+    <h1>Temperature and Humidity Data</h1>
+
+    <!-- Compact Date Filter Form in Top-Left Corner -->
+    <form class="date-form" id="dateForm" action="/filter_by_date" method="get">
+        <label for="date">Select Date:</label>
+        <input type="date" id="date" name="date">
+        <button type="submit">Filter</button>
+    </form>
+
+    <!-- Image (Graph) Display with Background and Right Margin -->
+    <div class="image-container">
+        <img src="{{ plot_url }}" alt="Filtered Graph">
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Temperature & Humidity Monitoring</p>
+    </footer>
+
+    <script>
+        // JavaScript function to toggle the visibility of the date selection form
+        function toggleForm() {
+            const form = document.getElementById("dateForm");
+            if (form.style.display === "none" || form.style.display === "") {
+                form.style.display = "flex";
+            } else {
+                form.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+
+
